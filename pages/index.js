@@ -20,7 +20,8 @@ export async function getStaticProps() {
     return {
         props: {
             products: data.products
-        }
+        },
+        revalidate: 10 // recreated every 10 seconds
     };
 }
 
