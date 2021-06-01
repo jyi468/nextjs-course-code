@@ -5,6 +5,11 @@ import fs from 'fs/promises';
 function ProductDetailPage(props) {
     const {loadedProduct} = props;
     // Pure react way is to use useEffect to make an API call but then page is not there when page initially rendered
+
+/*    if (!loadedProduct) {
+        return <p>Loading...</p>;
+    }*/
+
     return <Fragment>
         <h1>{loadedProduct.title}</h1>
         <p>{loadedProduct.description}</p>
@@ -34,11 +39,9 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
     return {
         paths: [
-            {params: { pid: 'p1'}},
-            {params: { pid: 'p2'}},
-            {params: { pid: 'p3'}},
+            {params: { pid: 'p1'}}
         ],
-        fallback: false
+        fallback: 'blocking'
     }
 }
 
