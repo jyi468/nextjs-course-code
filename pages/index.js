@@ -13,6 +13,7 @@ function HomePage(props) {
 }
 
 export async function getStaticProps() {
+    console.log('(Re-)Generating...');
     // cwd will be root folder after build not pages
     const filePath = path.join(process.cwd(), 'data', 'dummy-backend.json');
     const jsonData = await fs.readFile(filePath);
