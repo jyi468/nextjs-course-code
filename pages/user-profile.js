@@ -9,6 +9,7 @@ export default UserProfilePage;
 export async function getServerSideProps(context) {
     // req, res default objects from node for request and responses
     const {params, req, res} = context;
+    console.log('Server side code');
     return {
         props: {
             username: 'Josh'
