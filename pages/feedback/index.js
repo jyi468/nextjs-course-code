@@ -1,12 +1,31 @@
+import {useState} from 'react';
+
 import {buildFeedbackPath, extractFeedback} from "../api/feedback";
 
 function FeedbackPage(props) {
-    return <ul>
-        {props.feedbackItems.map((item) => (
-            <li key={item.id}>{item.text}</li>
-        ))}
-    </ul>
-};
+    const [feedbackData, setFeedbackData] = useState();
+    function loadFeedbackHandler(id) {
+        fetch(`/api/${id}`)// /api/some-feedback-id
+            .then(response => response.json())
+            .then(data => {
+                setFeedbackData(data.feedback);
+            });
+    }
+
+    return (
+        <>
+            {feedbackData && <p>{feedbackData.email}</p>}
+            <ul>
+                {props.feedbackItems.map((item) => (
+                    <li key={item.id}>
+                        {item.text}{' '}
+                        <button onClick={() => loadFeedbackHandler(item.id)}>Show Details</button>
+                    </li>
+                ))}
+            </ul>
+        </>
+    )
+}
 
 export async function getStaticProps() {
     // Use only for external apis. We don't need to send a request to feedback API route because all code is running
