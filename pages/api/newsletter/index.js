@@ -5,7 +5,7 @@ const handler = async (req, res) => {
         const email = req.body.email;
 
         const client = await MongoClient.connect(
-            'mongodb+srv://josh:ggzzmjkOe6CWHpMo@cluster0.ajkwa.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+            'mongodb+srv://josh:ggzzmjkOe6CWHpMo@cluster0.ajkwa.mongodb.net/events?retryWrites=true&w=majority'
         )
         const db = client.db();
 

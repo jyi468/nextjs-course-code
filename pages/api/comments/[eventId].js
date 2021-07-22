@@ -1,4 +1,6 @@
-const handler = (req, res) => {
+import {MongoClient} from "mongodb";
+
+const handler = async (req, res) => {
     const eventId = req.query.eventId;
     switch (req.method) {
         case 'POST':
@@ -10,13 +12,28 @@ const handler = (req, res) => {
                 res.status(422).json({message: 'Invalid input.'});
                 break;
             }
-            res.status(201).json({
-                message: 'Successfully Registered',
-                id: new Date().toISOString(),
+
+            const client = await MongoClient.connect(
+                'mongodb+srv://josh:ggzzmjkOe6CWHpMo@cluster0.ajkwa.mongodb.net/events?retryWrites=true&w=majority'
+            );
+
+            const newComment = {
+                eventId,
                 email,
                 name,
-                comment: text
-            });
+                text
+            };
+
+            const db = client.db();
+            const result = await db.collection('comments').insertOne(newComment);
+
+            console.log(result);
+
+            newComment.id = result.insertedId;
+
+            res.status(201).json(newComment);
+
+            await client.close();
             break;
         case 'GET':
         default:
