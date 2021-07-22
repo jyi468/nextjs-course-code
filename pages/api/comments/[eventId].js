@@ -2,6 +2,11 @@ import {MongoClient} from "mongodb";
 
 const handler = async (req, res) => {
     const eventId = req.query.eventId;
+    const client = await MongoClient.connect(
+        'mongodb+srv://josh:ggzzmjkOe6CWHpMo@cluster0.ajkwa.mongodb.net/events?retryWrites=true&w=majority'
+    );
+    const db = client.db();
+
     switch (req.method) {
         case 'POST':
             // Server-side validation
@@ -13,10 +18,6 @@ const handler = async (req, res) => {
                 break;
             }
 
-            const client = await MongoClient.connect(
-                'mongodb+srv://josh:ggzzmjkOe6CWHpMo@cluster0.ajkwa.mongodb.net/events?retryWrites=true&w=majority'
-            );
-
             const newComment = {
                 eventId,
                 email,
@@ -24,7 +25,6 @@ const handler = async (req, res) => {
                 text
             };
 
-            const db = client.db();
             const result = await db.collection('comments').insertOne(newComment);
 
             console.log(result);
@@ -33,17 +33,21 @@ const handler = async (req, res) => {
 
             res.status(201).json(newComment);
 
-            await client.close();
             break;
         case 'GET':
+            // Return all comments if using .find with no args
+            const documents = await db
+                .collection('comments')
+                .find()
+                .sort({_id: -1})
+                .toArray();
+            res.status(200).json({comments: documents});
+            break;
         default:
-            const comments = [
-                {id: '1', name: 'josh', comment: 'hello'},
-                {id: '2', name: 'josh', comment: 'hello2'},
-                {id: '3', name: 'josh', comment: 'hello3'}
-            ]
-            res.status(200).json({comments});
+            break;
     }
+
+    await client.close();
 };
 
 export default handler;

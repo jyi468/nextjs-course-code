@@ -22,7 +22,7 @@ function Comments(props) {
             setComments(data.comments);
           });
     }
-  })
+  }, [showComments]);
 
   function addCommentHandler(commentData) {
     // send data to API
