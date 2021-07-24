@@ -38,7 +38,7 @@ const handler = async (req, res) => {
             // Return all comments if using .find with no args
             const documents = await db
                 .collection('comments')
-                .find()
+                .find({eventId})
                 .sort({_id: -1})
                 .toArray();
             res.status(200).json({comments: documents});
