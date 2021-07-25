@@ -11,7 +11,7 @@ export const connectDatabase = async () => {
 export const insertDocument = async (client, collection, document) => {
     const db = client.db();
 
-    await db.collection(collection).insertOne({email: document});
+    return await db.collection(collection).insertOne(document);
 }
 
 export const getAllDocuments = async (client, collection, sort, filter={}) => {
